@@ -1,0 +1,11 @@
+#etch-grid {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  height: 100vh;
+}
+
+.pixel {
+  background: coral;
+}
