@@ -1,11 +1,65 @@
-#etch-grid {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(16, 1fr);
-  height: 100vh;
+:root {
+  --clr-neutral-900: hsl(0 0% 9%);
+  --clr-neutral-400: hsl(210 1% 64%);
+  --clr-neutral-100: hsl(210 20% 94%);
+
+  --clr-primary: hsl(12 74% 50%);
 }
 
-.pixel {
-  background: coral;
+body {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: var(--clr-neutral-100);
+  color: var(--clr-neutral-900);
+}
+
+#header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.5rem;
+  width: 600px;
+  margin: auto;
+}
+
+#etch-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  margin: 1rem auto;
+  height: 600px;
+  width: 600px;
+  box-shadow: 0px 0px 10px 2px hsla(0 0% 0% / 0.24);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: 0px 0px 4px 2px hsla(0 0% 0% / 0.24);
+  position: relative;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 2rem;
+  z-index: -1;
+  box-shadow: inset 0px 0px 0px 5px var(--clr-primary);
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+button:hover::before {
+  opacity: 0.8;
+}
+
+button.active::before {
+  opacity: 0.8;
+}
+
+.clear-btn {
 }
