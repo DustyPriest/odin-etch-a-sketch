@@ -10,9 +10,23 @@
   </head>
   <body>
     <div id="header">
+      <button class="size-btn small">Size</button>
       <div class="title">Etch-a-Sketch</div>
-      <button class="clear-btn">Clear</button>
+      <button class="clear-btn small">Clear</button>
     </div>
     <div id="etch-grid"></div>
+    <div class="form-curtain">
+      <div class="form-container">
+        <label for="size-input">Grid size (1 - 100):</label>
+        <div>
+          <input type="number" id="size-input" min="1" max="100" value="16" />
+          <span class="resize-text">x 16</span>
+        </div>
+        <div>
+          <button class="apply-size-btn small">Apply</button>
+          <button class="cancel-size-btn small">Cancel</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
