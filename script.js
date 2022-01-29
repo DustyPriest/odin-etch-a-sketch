@@ -20,6 +20,7 @@ const applyBtn = document.querySelector('.apply-size-btn');
 const cancelBtn = document.querySelector('.cancel-size-btn');
 const sizeInput = document.querySelector('#size-input');
 const resizeText = document.querySelector('.resize-text');
+const modeOptions = document.querySelectorAll('.mode-options > *');
 
 // ------ EVENT LISTENERS ------
 clearBtn.addEventListener('click', clearGrid);
@@ -38,7 +39,20 @@ cancelBtn.addEventListener('click', () => {
 
 applyBtn.addEventListener('click', handleInput);
 
+modeOptions.forEach((option) => {
+  option.addEventListener('click', selectMode);
+});
+
 // ------ EVENT FUNCTIONS ------
+
+function selectMode(e) {
+  modeOptions.forEach((option) => {
+    option.classList.remove('active');
+  });
+  mode = e.target.id;
+  e.target.classList.add('active');
+}
+
 function etchPixel(e) {
   switch (mode) {
     case 'colour': // immediate full colour
@@ -46,9 +60,12 @@ function etchPixel(e) {
       break;
     case 'retro': // +10% darkness per hover (greyscale)
       break;
-    case 'rainbow': // random full colour per pixel
-      break;
     case 'retro-colour': // +10% saturation with colour
+      break;
+    case 'rainbow': // random full colour per pixel
+      let hue = Math.floor(Math.random() * 241);
+      let lightness = randomInRange(40, 70);
+      e.target.style.backgroundColor = `hsl(${hue} 100% ${lightness}%)`;
       break;
     default:
       e.target.style.backgroundColor = 'red'; // red for testing
@@ -91,6 +108,13 @@ function resizeGrid() {
   }
 }
 
+// ------ GENERAL FUNCTIONS ------
+
+function randomInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // ------ ON PAGE LOAD ------
 
 resizeGrid();
+console.log(modeOptions);

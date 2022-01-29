@@ -21,6 +21,15 @@ body {
   margin: auto;
 }
 
+.mode-options {
+  display: flex;
+  flex-wrap: wrap;
+  width: 800px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem auto;
+}
+
 #etch-grid {
   display: grid;
   margin: 1rem auto;
@@ -54,7 +63,7 @@ button::before {
   z-index: -1;
   box-shadow: inset 0px 0px 0px 5px var(--clr-primary);
   opacity: 0;
-  transition: opacity 150ms ease-out;
+  transition: opacity 300ms ease-in-out;
 }
 
 button:hover::before {
