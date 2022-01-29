@@ -1,6 +1,17 @@
-let gridSize = 16;
-let canvasClr = 'white';
+// Script for etch-a-sketch drawing pad
+// Author: DustyPriest
 
+const DEFAULT_SIZE = 16;
+const DEFAULT_CANVAS_CLR = '#ffffff';
+const DEFAULT_MODE = 'colour';
+const DEFAULT_PAINT_CLR = '#000000';
+
+let gridSize = DEFAULT_SIZE;
+let canvasClr = DEFAULT_CANVAS_CLR;
+let mode = DEFAULT_MODE;
+let paintClr = DEFAULT_PAINT_CLR;
+
+// ------ DOM ELEMENTS ------
 const grid = document.querySelector('#etch-grid');
 const clearBtn = document.querySelector('.clear-btn');
 const sizeBtn = document.querySelector('.size-btn');
@@ -29,11 +40,23 @@ applyBtn.addEventListener('click', handleInput);
 
 // ------ EVENT FUNCTIONS ------
 function etchPixel(e) {
-  e.target.style.backgroundColor = 'black';
+  switch (mode) {
+    case 'colour': // immediate full colour
+      e.target.style.backgroundColor = paintClr;
+      break;
+    case 'retro': // +10% darkness per hover (greyscale)
+      break;
+    case 'rainbow': // random full colour per pixel
+      break;
+    case 'retro-colour': // +10% saturation with colour
+      break;
+    default:
+      e.target.style.backgroundColor = 'red'; // red for testing
+  }
 }
 
 function clearGrid() {
-  grid.childNodes.forEach((pixel) => (pixel.style.backgroundColor = 'white'));
+  grid.childNodes.forEach((pixel) => (pixel.style.backgroundColor = canvasClr));
 }
 
 function handleInput() {
@@ -67,10 +90,6 @@ function resizeGrid() {
     }
   }
 }
-
-// function updateResizeText(e) {
-//   resizeText.textContent = `x ${e.target.value}`;
-// }
 
 // ------ ON PAGE LOAD ------
 
