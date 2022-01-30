@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./script.js" defer></script>
+    <script
+      src="https://kit.fontawesome.com/cb7612831f.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="./style.css" />
     <title>Etch-a-Sketch</title>
   </head>
@@ -16,6 +20,7 @@
     </div>
     <div class="main-section">
       <div class="left-options">
+        <div class="section-title">Colour Options</div>
         <div class="option-container">
           <label for="brush-colour">Brush</label>
           <input type="color" id="brush-colour" value="#000000" />
@@ -24,9 +29,29 @@
           <label for="canvas-colour">Canvas</label>
           <input type="color" id="canvas-colour" value="#ffffff" />
         </div>
+        <div class="option-container">
+          <label for="eraser">Eraser</label>
+          <div class="eraser-box" id="eraser-box">
+            <i id="eraser" class="fas fa-eraser"></i>
+          </div>
+        </div>
       </div>
       <div id="etch-grid"></div>
-      <div class="right-options"><input type="checkbox" id="click-drag" /></div>
+      <div class="right-options">
+        <div class="section-title">Brush Options</div>
+        <div class="option-container">
+          <label for="hover">Hover</label>
+          <input type="checkbox" id="hover" />
+        </div>
+        <div class="option-container">
+          <label for="click-drag">Click & Drag</label>
+          <input type="checkbox" id="click-drag" />
+        </div>
+        <div class="option-container">
+          <label for="click">Click</label>
+          <input type="checkbox" id="click" />
+        </div>
+      </div>
     </div>
     <div class="mode-options">
       <button id="colour" class="colour-btn active">Colour</button>

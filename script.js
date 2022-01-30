@@ -6,13 +6,14 @@
 // TODO: retro, retrocolour modes
 // TODO: brush colour picker, canvas colour picker
 //          - canvas picker should only change pixels that are old canvas colour
-// TODO: add options for drag / click & drag / click?
+// TODO: add options for hover / click & drag / click?
 // TODO: show grid
 
 const DEFAULT_SIZE = 16;
 const DEFAULT_CANVAS_CLR = '#ffffff';
 const DEFAULT_MODE = 'colour';
 const DEFAULT_PAINT_CLR = '#000000';
+const DEFAULT_BRUSH_MODE = 'click-drag';
 
 let gridSize = DEFAULT_SIZE;
 let canvasClr = DEFAULT_CANVAS_CLR;
@@ -31,6 +32,7 @@ const resizeText = document.querySelector('.resize-text');
 const modeOptions = document.querySelectorAll('.mode-options > *');
 const brushClrSelection = document.querySelector('#brush-colour');
 const canvasClrSelection = document.querySelector('#canvas-colour');
+const eraser = document.querySelector('.eraser-box');
 
 // ------ EVENT LISTENERS ------
 clearBtn.addEventListener('click', clearGrid);
@@ -53,6 +55,8 @@ modeOptions.forEach((option) => {
   option.addEventListener('click', selectMode);
 });
 
+eraser.addEventListener('click', selectMode);
+
 brushClrSelection.addEventListener('change', (e) => {
   paintClr = e.target.value;
 });
@@ -65,6 +69,7 @@ function selectMode(e) {
   modeOptions.forEach((option) => {
     option.classList.remove('active');
   });
+  eraser.classList.remove('active');
   mode = e.target.id;
   e.target.classList.add('active');
 }
@@ -96,7 +101,11 @@ function etchPixel(e) {
       let lightness = randomInRange(40, 70);
       e.target.style.backgroundColor = `hsl(${hue} 100% ${lightness}%)`;
       break;
+    case 'eraser-box':
+      e.target.style.backgroundColor = canvasClr;
+      break;
     default:
+      console;
       e.target.style.backgroundColor = 'red'; // red for testing
   }
 }

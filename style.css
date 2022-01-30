@@ -41,7 +41,7 @@ body {
 .left-options,
 .right-options {
   gap: 2rem;
-  width: 100px;
+  width: 150px;
 }
 
 .option-container {
@@ -82,7 +82,8 @@ button.small {
   width: 7rem;
 }
 
-button::before {
+button::before,
+.eraser-box::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -93,11 +94,13 @@ button::before {
   transition: opacity 300ms ease-in-out;
 }
 
-button:hover::before {
+button:hover::before,
+.eraser-box:hover::before {
   opacity: 0.8;
 }
 
-button.active::before {
+button.active::before,
+.eraser-box.active::before {
   opacity: 0.8;
 }
 
@@ -118,6 +121,18 @@ input[type='color'] {
 input[type='checkbox'] {
   width: 1rem;
   height: 1rem;
+}
+
+.eraser-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 4px 2px hsla(0 0% 0% / 0.24);
+  width: 4rem;
+  height: 2rem;
+  cursor: pointer;
 }
 
 .form-curtain {
