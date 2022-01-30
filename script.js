@@ -1,24 +1,20 @@
 // Script for etch-a-sketch drawing pad
 // Author: DustyPriest
 
-// TODO: option to clear grid on mode change
 // TODO: cursor brush icon
-// TODO: retro, retrocolour modes
-// TODO: brush colour picker, canvas colour picker
-//          - canvas picker should only change pixels that are old canvas colour
-// TODO: add options for hover / click & drag / click?
 // TODO: show grid
 
 const DEFAULT_SIZE = 16;
 const DEFAULT_CANVAS_CLR = '#ffffff';
 const DEFAULT_MODE = 'colour';
 const DEFAULT_PAINT_CLR = '#000000';
-const DEFAULT_BRUSH_MODE = 'click-drag';
+const DEFAULT_BRUSH_MODE = 'hover';
 
 let gridSize = DEFAULT_SIZE;
 let canvasClr = DEFAULT_CANVAS_CLR;
 let mode = DEFAULT_MODE;
 let paintClr = DEFAULT_PAINT_CLR;
+let brushMode = DEFAULT_BRUSH_MODE;
 
 // ------ DOM ELEMENTS ------
 const grid = document.querySelector('#etch-grid');
@@ -33,6 +29,7 @@ const modeOptions = document.querySelectorAll('.mode-options > *');
 const brushClrSelection = document.querySelector('#brush-colour');
 const canvasClrSelection = document.querySelector('#canvas-colour');
 const eraser = document.querySelector('.eraser-box');
+const brushOptions = document.querySelectorAll('input[type="checkbox"]');
 
 // ------ EVENT LISTENERS ------
 clearBtn.addEventListener('click', clearGrid);
@@ -55,6 +52,10 @@ modeOptions.forEach((option) => {
   option.addEventListener('click', selectMode);
 });
 
+brushOptions.forEach((option) => {
+  option.addEventListener('click', selectBrush);
+});
+
 eraser.addEventListener('click', selectMode);
 
 brushClrSelection.addEventListener('change', (e) => {
@@ -72,6 +73,39 @@ function selectMode(e) {
   eraser.classList.remove('active');
   mode = e.target.id;
   e.target.classList.add('active');
+}
+
+function selectBrush(e) {
+  const oldBrushMode = brushMode;
+  brushOptions.forEach((option) => {
+    option.checked = false;
+  });
+  brushMode = e.target.id;
+  e.target.checked = true;
+  if (oldBrushMode !== brushMode) {
+    changePixelListeners();
+  } else {
+    console.log('no change');
+  }
+}
+
+function changePixelListeners() {
+  console.log('change');
+  switch (brushMode) {
+    case 'hover':
+      grid.childNodes.forEach((pixel) => {
+        pixel.removeEventListener('click', etchPixel);
+        pixel.addEventListener('mouseover', etchPixel);
+      });
+      break;
+    case 'click':
+      grid.childNodes.forEach((pixel) => {
+        pixel.removeEventListener('mouseover', etchPixel);
+        pixel.addEventListener('click', etchPixel);
+      });
+      break;
+    default:
+  }
 }
 
 function etchPixel(e) {
@@ -140,14 +174,17 @@ function resizeGrid() {
     for (let i = 0; i < gridSize; i++) {
       const pixel = document.createElement('div');
       pixel.style.backgroundColor = canvasClr;
-      pixel.addEventListener('mouseover', etchPixel);
+      if (brushMode === 'hover') {
+        pixel.addEventListener('mouseover', etchPixel);
+      } else if (brushMode === 'click') {
+        pixel.addEventListener('click', etchPixel);
+      }
       grid.appendChild(pixel);
     }
   }
 }
 
 function updateCanvasClr(e) {
-  console.log('fired');
   const oldCanvasClr = canvasClr;
   canvasClr = e.target.value;
   // update pixels not yet drawn on
