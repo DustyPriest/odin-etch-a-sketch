@@ -1,6 +1,14 @@
 // Script for etch-a-sketch drawing pad
 // Author: DustyPriest
 
+// TODO: option to clear grid on mode change
+// TODO: cursor brush icon
+// TODO: retro, retrocolour modes
+// TODO: brush colour picker, canvas colour picker
+//          - canvas picker should only change pixels that are old canvas colour
+// TODO: add options for drag / click & drag / click?
+// TODO: show grid
+
 const DEFAULT_SIZE = 16;
 const DEFAULT_CANVAS_CLR = '#ffffff';
 const DEFAULT_MODE = 'colour';
@@ -21,6 +29,8 @@ const cancelBtn = document.querySelector('.cancel-size-btn');
 const sizeInput = document.querySelector('#size-input');
 const resizeText = document.querySelector('.resize-text');
 const modeOptions = document.querySelectorAll('.mode-options > *');
+const brushClrSelection = document.querySelector('#brush-colour');
+const canvasClrSelection = document.querySelector('#canvas-colour');
 
 // ------ EVENT LISTENERS ------
 clearBtn.addEventListener('click', clearGrid);
@@ -43,6 +53,12 @@ modeOptions.forEach((option) => {
   option.addEventListener('click', selectMode);
 });
 
+brushClrSelection.addEventListener('change', (e) => {
+  paintClr = e.target.value;
+});
+
+canvasClrSelection.addEventListener('input', updateCanvasClr);
+
 // ------ EVENT FUNCTIONS ------
 
 function selectMode(e) {
@@ -59,11 +75,24 @@ function etchPixel(e) {
       e.target.style.backgroundColor = paintClr;
       break;
     case 'retro': // +10% darkness per hover (greyscale)
-      break;
-    case 'retro-colour': // +10% saturation with colour
+      // set initial shade if still canvas clr
+      if (rgbToHex(rgbToObject(e.target.style.backgroundColor)) === canvasClr) {
+        e.target.style.backgroundColor = 'rgb(238, 238, 238)';
+      }
+      // if black do nothing
+      else if (e.target.style.backgroundColor === 'rgb(0, 0, 0)') {
+        break;
+      }
+      // otherwise increase darkness
+      else {
+        const rgb = rgbToObject(e.target.style.backgroundColor);
+        // using all 3 rgb values incase applied to previously coloured pixel
+        const newShade = (+rgb.red + +rgb.green + +rgb.blue) / 3 - 17;
+        e.target.style.backgroundColor = `rgb(${newShade}, ${newShade}, ${newShade})`;
+      }
       break;
     case 'rainbow': // random full colour per pixel
-      let hue = Math.floor(Math.random() * 241);
+      let hue = Math.floor(Math.random() * 361);
       let lightness = randomInRange(40, 70);
       e.target.style.backgroundColor = `hsl(${hue} 100% ${lightness}%)`;
       break;
@@ -108,13 +137,42 @@ function resizeGrid() {
   }
 }
 
+function updateCanvasClr(e) {
+  console.log('fired');
+  const oldCanvasClr = canvasClr;
+  canvasClr = e.target.value;
+  // update pixels not yet drawn on
+  grid.childNodes.forEach((pixel) => {
+    rgbToHex(rgbToObject(pixel.style.backgroundColor)) === oldCanvasClr
+      ? (pixel.style.backgroundColor = canvasClr)
+      : '';
+  });
+}
+
 // ------ GENERAL FUNCTIONS ------
 
 function randomInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function rgbToObject(rgbStr) {
+  const rgbObj = {};
+  const rgbList = rgbStr
+    .substring(rgbStr.indexOf('(') + 1, rgbStr.lastIndexOf(')'))
+    .split(/,s*/);
+  rgbObj.red = rgbList[0].trim();
+  rgbObj.green = rgbList[1].trim();
+  rgbObj.blue = rgbList[2].trim();
+
+  return rgbObj;
+}
+
+function rgbToHex(rgbObj) {
+  return `#${parseInt(rgbObj.red).toString(16)}${parseInt(
+    rgbObj.green
+  ).toString(16)}${parseInt(rgbObj.blue).toString(16)}`;
+}
+
 // ------ ON PAGE LOAD ------
 
 resizeGrid();
-console.log(modeOptions);
